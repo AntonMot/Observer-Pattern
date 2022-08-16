@@ -4,7 +4,7 @@ import reportWebVitals from './reportWebVitals';
 interface PublisherInterface {
     subscribe(subscriber: Subscriber): void
     unsubscribe(subscriber: Subscriber): void
-    notifyObservers(): void
+    notifySubscribers(): void
 }
 
 interface SubscriberInterface {
@@ -24,7 +24,7 @@ class Publisher implements PublisherInterface {
         })
     }
 
-    notifyObservers() {
+    notifySubscribers() {
         this.subscribers.forEach(subscriber => {
             subscriber.notified();
         })
@@ -49,11 +49,11 @@ const someMedia = new Publisher();
 someMedia.subscribe(anton);
 someMedia.subscribe(alex);
 
-// someMedia.notifyObservers();
+// someMedia.notifySubscribers();
 
 // someMedia.unsubscribe(alex);
 
-someMedia.notifyObservers();
+someMedia.notifySubscribers();
 
 
 
