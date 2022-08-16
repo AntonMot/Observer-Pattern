@@ -1,19 +1,64 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+interface PublisherInterface {
+    subscribe(subscriber: Subscriber): void
+    unsubscribe(subscriber: Subscriber): void
+    notifyObservers(): void
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+interface SubscriberInterface {
+    notified(): void
+}
+
+class Publisher implements PublisherInterface {
+    private subscribers: Subscriber[] = [];
+
+    subscribe(subscriber: Subscriber) {
+        this.subscribers.push(subscriber)
+    }
+
+    unsubscribe(subscriber: Subscriber) {
+        this.subscribers = this.subscribers.filter((el)=>{
+            return subscriber.name != el.name
+        })
+    }
+
+    notifyObservers() {
+        this.subscribers.forEach(subscriber => {
+            subscriber.notified();
+        })
+    }
+}
+
+class Subscriber implements SubscriberInterface {
+    constructor(
+        public name: string
+    ) {}
+
+    notified() {
+        console.log( `${this.name} is notified` )
+    }
+}
+
+const anton = new Subscriber('Anton');
+const alex = new Subscriber('Alex');
+
+const someMedia = new Publisher();
+
+someMedia.subscribe(anton);
+someMedia.subscribe(alex);
+
+// someMedia.notifyObservers();
+
+// someMedia.unsubscribe(alex);
+
+someMedia.notifyObservers();
+
+
+
+
+
+
+
 reportWebVitals();
